@@ -7,11 +7,13 @@ from ch07.simple_convnet import SimpleConvNet
 import glob
 from tqdm import tqdm
 from 実験 import data_prosess
-
+import pickle
+import time
+import datetime
 network = SimpleConvNet()
 x_train,x_test,t_train,t_test = data_prosess(10,30)
 
-iters_num = 10  # 繰り返しの回数を適宜設定する
+iters_num = 2  # 繰り返しの回数を適宜設定する
 train_size = x_train.shape[0]
 batch_size = 5
 learning_rate = 0.1
@@ -55,3 +57,6 @@ plt.ylabel("accuracy")
 plt.ylim(0, 1.0)
 plt.legend(loc='lower right')
 plt.show()
+with open(f'weights{datetime.datetime.now()}.pickle','wb') as f:
+    pickle.dump(network.params,f)
+    print('finish')
