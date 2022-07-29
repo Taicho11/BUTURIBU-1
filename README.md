@@ -2,6 +2,7 @@
 ゼロつくgithub https://github.com/oreilly-japan/deep-learning-from-scratch
 
 ※githubに載ってる順じゃなくて時系列順に説明するよ
+
 〈foldermaking.py〉
     学習データ(になりたい写真)を集めるために必要なフォルダを作るよ。
 
