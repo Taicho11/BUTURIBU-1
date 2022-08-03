@@ -2,8 +2,11 @@ import sys,os
 sys.path.append(os.pardir)
 from collections import OrderedDict
 from common.layers import *
+from common.functions import softmax
 class plactice1st:
     def __init__(self,weights):
+        #ここで指定した処理（conv1とか）を上から順に実行する
+        #写真のRGBをローバーを動かす時間に変換する
         self.layers = OrderedDict()
         self.layers['Conv1'] = Convolution(weights['W1'], weights['b1'])
         self.layers['Relu1'] = Relu()
@@ -15,4 +18,6 @@ class plactice1st:
     def predict(self,x):
         for layer in self.layers.values():
             x = layer.forward(x)
-        return x
+        y = softmax(x)
+        y = np.argmax(y)
+        return y
