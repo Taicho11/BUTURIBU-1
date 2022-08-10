@@ -10,8 +10,8 @@ import pickle
 import datetime
 import RPi.GPIO as GPIO
 
-with open ('weights2022-06-04 08:14:37.187527.pickle','rb') as f: #openの第一引数に重みが記録されているファイルのパスを入力する
-    weights = pickle.load(f) #変数'weights’に重みが代入される
+with open ('weights2022-06-04 08:14:37.187527.pickle','rb') as f:                                                 #openの第一引数に重みが記録されているファイルのパスを入力する
+    weights = pickle.load(f)                                                                                      #変数'weights’に重みが代入される
     
 
     """
@@ -25,9 +25,9 @@ with open ('weights2022-06-04 08:14:37.187527.pickle','rb') as f: #openの第一
 #     conv - relu - pool - affine - relu - affine - softmax
 pic = '/home/pi/Desktop/deep-learning-from-scratch-master/教材収集/0.taichou/2022年06月13日18時39分27秒.jpg'
 x = cv2.imread(pic)
-x = x.reshape(1,480,640,3).transpose(0,3,1,2)#ただの写真をAIのためのデータに整形する
+x = x.reshape(1,480,640,3).transpose(0,3,1,2)                                                                      #ただの写真をAIのためのデータに整形する
 
-cla = plactice1st(weights)#使うAI（のクラス）を指定する
-y = cla.predict(x)#ここで行われている処理はこのファイルの５行目でimportされているファイルを参照（それもgithub内にあります）
+cla = plactice1st(weights)                                                                                         #使うAI（のクラス）を指定する
+y = cla.predict(x)                                                                                                 #ここで行われている処理はこのファイルの５行目でimportされているファイルを参照（それもgithub内にあります）
 print(y)
 
