@@ -29,5 +29,5 @@
 〈plactice_1st.py〉
     learning1stで作ったAIを実行して、ローバーを動かす。
 
-〈practice1st.py〉
+〈practice1st_class.py〉
     plactice_1stの補助。
