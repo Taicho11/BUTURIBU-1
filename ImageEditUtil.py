@@ -3,30 +3,46 @@ import shutil
 import cv2
 from collections import OrderedDict
 import glob
+class imageedit:
+    def __init__(self,outputparentfoldr,inputparentfolder,anglestep):
+        self.outputparentfolder=outputparentfoldr
+        self.inputparentfolder=inputparentfolder
+        self.anglestep=anglestep
+        
+    def makefolder(self,foldernumber=33):
+        shutil.rmtree(self.outputparentfolder,ignore_errors=True)
+        os.makedirs(self.outputparentfolder)
+        for i in range(foldernumber):
+            foldername=os.path.join(self.outputparentfolder,f'{i*self.anglestep}')
+            os.makedirs(foldername)
 
-def makefolder(foldernumber=31,parentfolder='/home/pi/Desktop/fixedimages'):
-    shutil.rmtree(parentfolder,ignore_errors=True)
-    os.makedirs(parentfolder)
-    for i in range(foldernumber):
-        shutil.rmtree(parentfolder+'/*',ignore_errors=True)
-        foldername=os.path.join(parentfolder,f'{i*12}')
-        os.makedirs(foldername)
+    def imread(self):
+        imagepath=os.path.join(self.inputparentfolder,'*','*')
+        imagepaths=glob.glob(imagepath)
+        imagepaths.sort()
+        
+        images={}
 
-def imread(folderpath='/home/pi/Desktop/画像編集/TeacherPictures'):
-    imagepath=os.path.join(folderpath,'*','*')
-    imagepaths=glob.glob(imagepath)
-    imagepaths.sort()
+        for angle,i in enumerate(imagepaths):
+            trueangle=angle*self.anglestep
+            images[str(trueangle)]=cv2.imread(i)
+        
+        return images
     
-    dictio=OrderedDict()
-
-    angle=0
-    for i in imagepaths:
-        angle+=1
-        trueangle=angle*12
-        dictio[str(trueangle)]=cv2.imread(i)
-
-def experi(inputpath='/home/pi/Desktop/画像編集/TeacherPictures/8.taichou/2022年08月23日13時54分14秒.jpg',ystart,yend,xstart,xend,outputpath='/home/pi/Desktop/画像編集/fixedimages/0/fixed5.jpg'):
-    image = cv2.imread(inputpath)
-    fixedimage=image[ystart:yend,xstart:xend,:]
-    fixedimage=cv2.rotate(fixedimage,cv2.ROTATE_180)
-    cv2.imwrite(outputpath,fixedimage)
+    def edit(self,images):
+        image=images[1]
+        fixedimage=images[200:420,:,:]
+        fixedimage=cv2.rotate(fixedimage,cv2.ROTATE_180)
+        return fixedimage
+    
+    def imwrite(self):
+        images=self.imread()
+        for folder,image in images.items():
+            fixedimage=self.edit(image)
+            folder=str(folder)
+            outputfolder=os.path.join(self.outputparentfolder,folder,'fixed.jpg')
+            cv2.imwrite(outputfolder,fixedimage)
+            
+kurasu=imageedit(outputparentfoldr='/home/pi/Desktop/ImageEdit/fixedimages',inputparentfolder='/home/pi/Desktop/ImageEdit/TeacherPictures',anglestep=12)
+kurasu.imwrite()
+#kurasu.makefolder()
