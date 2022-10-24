@@ -6,9 +6,9 @@ from tensorflow.keras.layers import Conv2D,Dense,MaxPooling2D
 from tensorflow.data import Dataset
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.utils import plot_model
-
 import cv2
-
+from keras.models import load_model
+################################################################################################################################################################################################################################
 def makefolder(folder_name,rm=False):
     if rm:
         shutil.rmtree(folder_name,ignore_errors=True)
@@ -36,8 +36,6 @@ def makegenerater(inputfolder,inputsize, batch):
     classinfo={v:k for k,v in train_generator.class_indices.items()}
     return train_ds,train_generator.n,valid_ds,valid_generator.n,classinfo
 
-
-
 def graph(history,graphfile):
     def graphplot(tatememori,yokomemori,index,xdata_ephocs,trainydata,validydata,ylim,ylabel):
         plt.subplot(tatememori,yokomemori,index)
@@ -56,8 +54,23 @@ def graph(history,graphfile):
     graphplot(2,1,1,xdata_ephocs,history['loss'],history['val_loss'],(0,5),'loss')
     plt.savefig(graphfile)
     plt.close('all')
-    
 
+ ####################################################################################################################################################################################################################################   
+def estimateimage(image_path,dsize=(50,50)):
+    input_data=cv2.imread(image_path)
+    input_data=cv2.resize(input_data,dsize=dsize)
+    input_data=input_data.reshape(1,*dsize,3)
+    input_data=input_data.astype('float32')/255
+
+    return input_data
+
+def tflite_from_keras(input_path,output_path):
+    model= load_model(input_path)
+
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    tflite_model = converter.convert()
+
+    open(output_path,'wb').write(tflite_model)
 ##############################################################################################################################################
 
 def add_conv_pool(x,filternumber,filtersize,pool,kasseika='relu'):
